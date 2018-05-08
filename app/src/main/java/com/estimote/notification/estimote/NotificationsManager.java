@@ -12,13 +12,16 @@ import android.util.Log;
 import com.estimote.internal_plugins_api.cloud.proximity.ProximityAttachment;
 import com.estimote.notification.MainActivity;
 import com.estimote.notification.MyApplication;
+import com.estimote.notification.MyRemoteDBHandler;
 import com.estimote.proximity_sdk.proximity.ProximityObserver;
 import com.estimote.proximity_sdk.proximity.ProximityObserverBuilder;
 import com.estimote.proximity_sdk.proximity.ProximityZone;
 import com.estimote.proximity_sdk.trigger.ProximityTriggerBuilder;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import kotlin.Unit;
@@ -30,12 +33,19 @@ import kotlin.jvm.functions.Function1;
 
 public class NotificationsManager {
 
+    private static final String TAG = "NotificationsManager";
+    private static final boolean DEBUG = true;
+
     private Context context;
     private NotificationManager notificationManager;
     private Notification helloNotification;
     private Notification goodbyeNotification;
     private int notificationId = 1;
+    private Date currTime;
     private String currTimeStr;
+    private MyRemoteDBHandler dbHandler;
+    private String dbUrl;
+    private String userId;
 
     public NotificationsManager(Context context) {
         this.context = context;
@@ -84,10 +94,19 @@ public class NotificationsManager {
                 .withOnEnterAction(new Function1<ProximityAttachment, Unit>() {
                     @Override
                     public Unit invoke(ProximityAttachment attachment) {
-                        // TODO get this device identifier
-                        // TODO pass currTimeStr and thisDeviceIdentifier to server
+                        // TODO get this device identifier --> use user ID / email instead
+                        // TODO pass currTimeStr and thisDeviceIdentifier to server --> handled by MyRemoteDBHandler
+
+                        currTime = Calendar.getInstance().getTime();
+                        dbHandler = new MyRemoteDBHandler(dbUrl, userId, currTime);
+                        try {
+                            dbHandler.post();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            if (DEBUG) Log.e(TAG, "dbHandler.post()", e);
+                        }
                         currTimeStr = new SimpleDateFormat("EEEE, d MMM yyyy (HH:mm a)", Locale.getDefault())
-                                .format(Calendar.getInstance().getTime());
+                                .format(currTime);
                         notificationManager.notify(notificationId, buildNotification("Blueberry says hi!",
                                 String.format("Your latest checkpoint was in %s.", currTimeStr)));
                         // notificationManager.notify(notificationId, helloNotification);
