@@ -1,7 +1,9 @@
 package com.estimote.notification;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -56,11 +58,13 @@ public class MyRemoteDBHandler {
     }
 
     public String toTimeJson(String userId, Date clientTime){
-        return toTimeJson(userId, clientTime.getTime());
+        String timeParsed = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss", Locale.getDefault()).format(clientTime);
+        return "{\"username\": \"" + userId + "\", \"time\": \"" + timeParsed + "\"}";
+        // return toTimeJson(userId, clientTime.getTime());
     }
 
     public String toTimeJson(String userId, long clientTime){
-        return "{\"user_id\": \"" + userId + "\", \"client_check_time\": " + clientTime + "}";
+        return "{\"username\": \"" + userId + "\", \"time\": " + clientTime + "}";
     }
 
 

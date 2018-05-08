@@ -43,19 +43,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/square_profile_icon"
                     android:orientation="vertical">
+
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/square_profile_icon"
+                        android:layout_height="wrap_content"
                         android:text="@string/app_name"
-                        android:textSize="16sp"/>
+                        android:textSize="32sp" />
+
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/square_profile_icon"
-                        android:text="@string/app_name"
-                        android:textSize="16sp"/>
+                        android:layout_height="wrap_content"
+                        android:text="@string/requesting_location_access"
+                        android:textSize="16sp" />
                 </LinearLayout>
 
             </LinearLayout>
+
+            <ListView
+                android:id="@+id/check_time_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </ListView>
 
         </LinearLayout>
 

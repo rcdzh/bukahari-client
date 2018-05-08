@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.estimote.internal_plugins_api.cloud.proximity.ProximityAttachment;
 import com.estimote.notification.MainActivity;
@@ -41,11 +42,14 @@ public class NotificationsManager {
     private Notification helloNotification;
     private Notification goodbyeNotification;
     private int notificationId = 1;
+
     private Date currTime;
     private String currTimeStr;
     private MyRemoteDBHandler dbHandler;
-    private String dbUrl;
+    private String dbUrl = "http://bukahari.000webhostapp.com/api/attendance?username=nktb2018" ;
     private String userId;
+    private String postResponse = "";
+    private int postResponseInt = 404;
 
     public NotificationsManager(Context context) {
         this.context = context;
@@ -99,16 +103,21 @@ public class NotificationsManager {
 
                         currTime = Calendar.getInstance().getTime();
                         dbHandler = new MyRemoteDBHandler(dbUrl, userId, currTime);
+
+                        currTimeStr = new SimpleDateFormat("EEEE, d MMM yyyy (HH:mm a)", Locale.getDefault())
+                                .format(currTime);
+                        notificationManager.notify(notificationId, buildNotification("BukaPintu says hi!",
+                                String.format("Your latest checkpoint was in %s.", currTimeStr)));
+/*
                         try {
-                            dbHandler.post();
+                            postResponse = dbHandler.post();
+                            // postResponseInt = Integer.parseInt(postResponse);
                         } catch (IOException e) {
                             e.printStackTrace();
                             if (DEBUG) Log.e(TAG, "dbHandler.post()", e);
                         }
-                        currTimeStr = new SimpleDateFormat("EEEE, d MMM yyyy (HH:mm a)", Locale.getDefault())
-                                .format(currTime);
-                        notificationManager.notify(notificationId, buildNotification("Blueberry says hi!",
-                                String.format("Your latest checkpoint was in %s.", currTimeStr)));
+*/
+                        Toast.makeText(context, String.format("postResponse: %s", postResponse), Toast.LENGTH_LONG).show();
                         // notificationManager.notify(notificationId, helloNotification);
                         return null;
                     }
