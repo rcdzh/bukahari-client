@@ -69,58 +69,63 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/lbl_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Date" />
-
-                    <EditText
-                        android:id="@+id/in_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="2018/01/31"
-                        android:inputType="date" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/lbl_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Time" />
-
-                    <EditText
-                        android:id="@+id/in_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="18:00"
-                        android:inputType="time" />
-
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/btn_record"
+                <TextView
+                    android:id="@+id/lbl_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="170dp"
-                    android:text="Record"
-                    android:onClick="recordDatetime" />
+                    android:text="Date" />
+
+                <EditText
+                    android:id="@+id/in_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="2018/01/31"
+                    android:inputType="date" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lbl_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time" />
+
+                <EditText
+                    android:id="@+id/in_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="18:00"
+                    android:inputType="time" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Record"
+                android:onClick="recordDatetime" />
+
+            <TextView
+                android:id="@+id/lbl_work_duration_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Work Duration"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="196dp" />
 
         </LinearLayout>
 

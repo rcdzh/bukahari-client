@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import okhttp3.Authenticator;
 import okhttp3.Credentials;
@@ -25,6 +26,11 @@ public class MyRemoteDBHandler extends AsyncTask<String, Integer, String> {
 
     public MyRemoteDBHandler() {
         this.client = this.createAuthenticatedClient();
+    }
+
+    public MyRemoteDBHandler(String dbUrl) {
+        this.client = this.createAuthenticatedClient();
+        this.dbUrl = dbUrl;
     }
 
     public MyRemoteDBHandler(String userId, Date clientTime) {
@@ -54,6 +60,10 @@ public class MyRemoteDBHandler extends AsyncTask<String, Integer, String> {
             ).build();
             }
         }).build();
+    }
+
+    public String getContent () throws IOException {
+        return getContent(this.dbUrl);
     }
 
     public String getContent (String url) throws IOException {
@@ -98,9 +108,15 @@ public class MyRemoteDBHandler extends AsyncTask<String, Integer, String> {
 
     protected String doInBackground(String... requests) {
         try {
-            String res = this.post();
-            System.out.println(res);
-            return res;
+            if (requests[0].equals("POST")) {
+                String res = this.post();
+                System.out.println(res);
+                return res;
+            } else if (requests[0].equals("GET")) {
+                String res = this.getContent();
+                System.out.println(res);
+                return res;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

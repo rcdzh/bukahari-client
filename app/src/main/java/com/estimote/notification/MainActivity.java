@@ -8,12 +8,23 @@ import android.widget.EditText;
 
 import com.estimote.mustard.rx_goodness.rx_requirements_wizard.Requirement;
 import com.estimote.mustard.rx_goodness.rx_requirements_wizard.RequirementsWizardFactory;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import kotlin.Unit;
@@ -58,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
                                 return null;
                             }
                         });
+
+        generateBarChart(null);
     }
 
     public void recordDatetime(View view) {
@@ -75,9 +88,53 @@ public class MainActivity extends AppCompatActivity {
                 "nashr3",
                 date
             );
-            req.execute("hello");
+            req.execute("POST");
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    public void generateBarChart(View view) {
+        Long defaultFrom = new GregorianCalendar(2018, 0, 1).getTime().getTime() / 1000;
+        Long defaultTo = new GregorianCalendar(2018, 0, 7).getTime().getTime() / 1000;
+        MyRemoteDBHandler req = new MyRemoteDBHandler(
+            "http://bukahari.test/api/attendance?username=nashr3&from="
+                + defaultFrom
+                + "&to="
+                + defaultTo
+//            "http://bukahari.000webhostapp.com/api/attendance"
+        );
+        req.execute("GET");
+
+        BarChart chart = findViewById(R.id.chart);
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        JSONArray array = new JSONArray();
+        try {
+            JSONObject item = new JSONObject();
+            item.put("date", "2018-01-01");
+            item.put("checked_in_at", "11:00");
+            item.put("checked_out_at", "21:00");
+            array.put(item);
+
+            item = new JSONObject();
+            item.put("date", "2018-01-02");
+            item.put("checked_in_at", "10:31");
+            item.put("checked_out_at", "21:34");
+            array.put(item);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        List<BarEntry> entries = new ArrayList<BarEntry>();
+        for (int i = 0; i < array.length(); i++) {
+            entries.add(new BarEntry(i, (i+1)*12));
+        }
+
+        BarDataSet dataSet = new BarDataSet(entries, "Label Blabla");
+        BarData lineData = new BarData(dataSet);
+        chart.setData(lineData);
+        chart.invalidate();
     }
 }
